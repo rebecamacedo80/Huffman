@@ -2,13 +2,17 @@
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Main{
-
+    // Array de bits para preencher o dicionário
+    static ArrayList<Integer> bits = new ArrayList<>();
+    
+    // Array de objetos tipo código que será nosso "Dicionário
+    static ArrayList<Codigo> dictionary = new ArrayList<>();
 
     // Lê o arquivo e retorna um array de inteiros contendo
-    public static int[] read_file(String file_path) throws IOException, FileNotFoundException{
+    public static int[] fileToArray(String file_path) throws IOException, FileNotFoundException{
+        
             File file = new File(file_path);
             FileInputStream arq =  new FileInputStream(file);
             DataInputStream data =  new DataInputStream(arq);
@@ -24,10 +28,21 @@ public class Main{
 
         return freq_vector;
     }
+    // Preenche um arraylist a partir de um array de frequências apenas com os
+    // caracteres que tem frequência maior que zero.
+    public static void fillArraylist(int[] freq, ArrayList<No> ar){
+        
+        for(int i = 0; i < freq.length; i++){
+            if(freq[i] != 0){
+                
+                ar.add( new No(freq[i], i));
+            }
+        }
+    }
 
-    public static void createTree(FilaMin fila){
+    public static No createTree(FilaMin fila){
+       
         while(fila.tam_heap > 1){
-            
             
             No no1 = fila.extractMin();
             No no2 = fila.extractMin();
@@ -43,13 +58,13 @@ public class Main{
             System.out.println("\nFreq de parent: " + parent.freq);
             fila.insert(parent);           
         }
+        return fila.extractMin();
     }
-    static ArrayList<Integer> bits = new ArrayList<>();
-    static ArrayList<Codigo> dicionario = new ArrayList<>();
+
     
     public static void codifica(No no){         
         if(no == null){
-            return ;
+            return;
         }        
         if(no.esq != null){
             
@@ -62,8 +77,7 @@ public class Main{
             codifica(no.dir);
         }
         if(no.dir == null && no.esq == null){
-            dicionario.add(new Codigo(bits, no.carac));
-           
+            dictionary.add(new Codigo(bits, no.carac));  
             //System.out.println("Informações de code:\nCaractere " + code.sym + "\tCodigo: " + code.bits + "\tSize: " + code.size);
             //System.out.println("\nfreq do no: " + no.freq + "\tcodigo: " + bits);
             bits.remove(bits.size() -1);
@@ -72,74 +86,80 @@ public class Main{
         
     }
     
-    public static void comprime() throws FileNotFoundException, IOException{
-        File file = new File("/home/rebeca/Huffman/huffman_algorithm/generated.fib25");
-        FileInputStream arq_leitura =  new FileInputStream(file);
-        DataInputStream data =  new DataInputStream(arq_leitura);
+    public static void comprime(String file_orig, String file_dest) throws FileNotFoundException, IOException{
         
-        FileWriter arq = new FileWriter("/home/rebeca/Huffman/huffman_algorithm/aeo.txt");
-        PrintWriter gravar = new PrintWriter(arq);
+        // Leitura do Arquivo
+        File file = new File(file_orig);
+        FileInputStream arq1 =  new FileInputStream(file);
+        DataInputStream data_read =  new DataInputStream(arq1);
+        ArrayList<Integer> buffer_arq =  new ArrayList<>();
+        
+        
+        //FileWriter arq = new FileWriter(file_dest);
+        //PrintWriter gravar = new PrintWriter(arq);
          
                 
         for(int i = 0; i < file.length(); i++){
-            int aux = data.read();
-            for(int j = 0; j < dicionario.size(); j++){
-                if(aux == dicionario.get(j).sym){
-                    for(int k = 0; k < dicionario.get(j).bits.length; k++){
-                        System.out.println("gravar: \t"+dicionario.get(j).bits[k]);
-                        gravar.print(dicionario.get(j).bits[k]);
+            int aux = data_read.read();
+            for(int j = 0; j < dictionary.size(); j++){
+                if(aux == dictionary.get(j).sym){
+                    for(int k = 0; k < dictionary.get(j).bits.length; k++){
+                        //buffer_arq.add(dictionary.get(j).bits[k]);
+                        System.out.println(dictionary.get(j).bits[k]);
+                        //System.out.println("gravar: \t"+dictionary.get(j).bits[k]);
+                        //gravar.print(dictionary.get(j).bits[k] + " ");
                     }
                 }
             }
         }
-        /*
         
-        for(int i = 0; i < dicionario.size(); i++){
-            
-            if(data.read() == dicionario.get(i).sym){
-                for(int j = 0; j < dicionario.get(i).bits.length; j++){
-                gravar.print(dicionario.get(i).bits[j]);
-                }
-            }
-        }*/
-        arq.close();            
+        //byte[] ar_byte = buffer_arq.toString().getBytes();
+        
+        //String teste = buffer_arq.toString();
+        
+        //System.out.println(teste);
+        
+        //FileOutputStream fileOutputStream = new FileOutputStream(new File("/home/lucas/teste.aee"));
+	//fileOutputStream.write(ar_byte);
+	//fileOutputStream.close();
+        
+        arq1.close();
+        data_read.close();
     }
     
     public static void main(String[] args) throws FileNotFoundException, IOException{
+        
+        // Caminho dos arquivos
+        String file_orig = "/home/lucas/GitHub/Huffman/huffman_algorithm/generated.fib25";
+        String file_dest = "/home/lucas/GitHub/Huffman/huffman_algorithm/output.out";
 
         // Cria um vetor de tamanho 256 com as frequências
-
-        int vector_freq[] =  Main.read_file("/home/rebeca/Huffman/huffman_algorithm/generated.fib25");
+        //int vector_freq[] =  fileToArray(file_orig);
+        
+        //for(int i = 0; i < vector_freq.length; i++){
+        //    System.out.print(vector_freq[i] + " ");
+        //}
 
         // Cria um arraylist que será preenchido apenas com os que tem frequência != 0
-        ArrayList<No> ar = new ArrayList<>();
+       //ArrayList<No> ar = new ArrayList<>();
 
-        for(int i = 0; i < vector_freq.length; i++){
-            if(vector_freq[i] != 0){
-                
-                ar.add( new No(vector_freq[i], i));
-            }
-        }
+        // Preenche o arraylist com a Lista de Frequencia (apenas os !=0)
+        //fillArraylist(vector_freq, ar);
+        
         // Cria a fila mínima e a preenche apenas com o arraylist de Nós que contém as suas frequências.
-        FilaMin fila = new FilaMin(ar.size());        
-        fila.fill(ar);
-
-        fila.buildMinHeap();
-        fila.show(); // Printa a fila mínima
-        createTree(fila);
-        codifica(fila.vector_no[fila.tam_heap - 1]);
+        //FilaMin fila = new FilaMin(ar.size());        
+        //fila.fill(ar);
+        //fila.buildMinHeap();
         
-        comprime();
-        /*        
-        No[] filaminima = new No[fila.comp_heap];
-        //Printa extraindo todos os elementos da fila 
-        System.out.println();
-        for(int i = 0; i < fila.comp_heap; i++){
-            filaminima[i] = fila.extractMin();
-            System.out.print(filaminima[i].freq + " ");
-        }
-        */
+        // Cria a árvore a partir da fila mínima
+        //No tree_root = createTree(fila);
         
+        // Codifica a arvore e salva no Array dicionário
+        //codifica(tree_root);
+        
+        // Comprime o arquivo e salva em um novo arquivo
+        //comprime(file_orig, file_dest);
+ 
        
     }
 }

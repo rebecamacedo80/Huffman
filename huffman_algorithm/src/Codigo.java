@@ -14,11 +14,10 @@ import java.util.ArrayList;
 public class Codigo {
     int[] bits;
     int sym;
-    int size;
     
     public Codigo(ArrayList<Integer> b, int ch){
-        size = b.size();
-        bits = new int[size];
+        bits = new int[b.size()];
+        
         for(int i = 0; i < b.size(); i++){
             bits[i] = b.get(i);
         }
