@@ -4,6 +4,7 @@ public class No {
     public No pai;
     public No esq;
     public No dir;
+    public int h;
 
     public No(int freq, int carac){
         this.freq = freq;
@@ -11,6 +12,7 @@ public class No {
         pai = null;
         esq = null;
         dir = null;
+        
     }
 
 }

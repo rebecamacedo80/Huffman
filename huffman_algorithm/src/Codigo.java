@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.BitSet;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -12,15 +13,23 @@ import java.util.ArrayList;
  * @author rebeca
  */
 public class Codigo {
-    int[] bits;
+    //BitSet bits;
+    int[] bits = new int[256];
+    int size;
     int sym;
     
-    public Codigo(ArrayList<Integer> b, int ch){
-        bits = new int[b.size()];
-        
-        for(int i = 0; i < b.size(); i++){
-            bits[i] = b.get(i);
-        }
+    /*public Codigo(BitSet bitset, int ch){
+        bits = bitset;
+        size = (bitset.length()/2);
         sym = ch;        
+    }*/
+    
+    public Codigo(ArrayList<Integer> bits, int ch){
+        size = bits.size();
+        //System.out.println("bits size dentro de codigo: " + size);
+        for(int i = 0; i < bits.size(); i++){
+            this.bits[i] = bits.get(i);
+        }
+        sym = ch;
     }
 }
