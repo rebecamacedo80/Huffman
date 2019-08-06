@@ -18,15 +18,8 @@ public class Codigo {
     int size;
     int sym;
     
-    /*public Codigo(BitSet bitset, int ch){
-        bits = bitset;
-        size = (bitset.length()/2);
-        sym = ch;        
-    }*/
-    
     public Codigo(ArrayList<Integer> bits, int ch){
         size = bits.size();
-        //System.out.println("bits size dentro de codigo: " + size);
         for(int i = 0; i < bits.size(); i++){
             this.bits[i] = bits.get(i);
         }

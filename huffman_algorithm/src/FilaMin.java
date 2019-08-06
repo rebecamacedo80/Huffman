@@ -23,22 +23,17 @@ public class FilaMin extends Heap{
     }
 
     public void decreaseKey(int i, No no){        
-        //if(no.freq > vector_no[i].freq){
-            //System.out.println("Chave inserida é maior que a atual");
-        //}else{
-            vector_no[i] = no;
+        vector_no[i] = no;
 
-            while((i > 0) && (vector_no[pai(i)].freq > vector_no[i].freq)){
-                swap(i, pai(i));
-                i = pai(i);
-            }
-        //}
+        while((i > 0) && (vector_no[pai(i)].freq > vector_no[i].freq)){
+            swap(i, pai(i));
+            i = pai(i);
+        }        
     }
 
     public void insert(No no){
         tam_heap += 1;
         comp_heap = tam_heap;
-        //vector_no[tam_heap -1].freq = Integer.MAX_VALUE;
         decreaseKey((tam_heap -1), no);
 
     }
